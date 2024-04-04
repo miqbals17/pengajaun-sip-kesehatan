@@ -1,21 +1,17 @@
 package main
 
-import "github.com/gofiber/fiber/v3"
+import (
+	"app/api"
+	"log"
+)
 
 func main() {
-	// Initialize a new Fiber app
-	app := fiber.New()
+	server, err := api.NewServer()
+	if err != nil {
+		log.Fatal("cannot create server:", err)
+	}
 
-	// Define a route for the GET method on the root path '/'
-	app.Get("/", func(c fiber.Ctx) error {
-		// Send a string response to the client
-		return c.SendString("Hello, World 👋!")
-	})
-
-	app.Get("/users", func(c fiber.Ctx) error {
-		return c.SendString("List of all users!")
-	})
-
-	// Start the server on port 3000
-	app.Listen(":3000")
+	if err := server.Start(":3000"); err != nil {
+		log.Fatal("cannot start server:", err)
+	}
 }
